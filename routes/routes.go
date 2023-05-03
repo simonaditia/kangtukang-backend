@@ -15,7 +15,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 
 	publicRoutes := router.Group("/auth")
 	{
-		publicRoutes.POST("/register", controllers.Register)
+		publicRoutes.POST("/register-customer", controllers.RegisterCustomer)
+		publicRoutes.POST("/register-tukang", controllers.RegisterTukang)
 		publicRoutes.POST("/login", controllers.Login)
 	}
 
@@ -33,9 +34,23 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 			{
 				users.GET("/", controllers.FindUsers)
 				users.GET("/:id", controllers.FindUser)
+				users.GET("/findTukang", controllers.FindTukang)
+				users.GET("/findTukang/:id", controllers.DetailTukang)
 				// users.POST("/", controllers.CreateUser)
 				users.PATCH("/:id", controllers.UpdateUser)
 				users.DELETE("/:id", controllers.DeleteUser)
+			}
+			orders := v1.Group("/orders")
+			{
+				orders.POST("/:id/order", controllers.Order)
+				orders.GET("/statusOrderCustomerMenunggu", controllers.StatusOrderCustomerMenunggu)
+				orders.GET("/statusOrderCustomerBerlangsung", controllers.StatusOrderCustomerBerlangsung)
+				orders.GET("/statusOrderCustomerSelesai", controllers.StatusOrderCustomerSelesai)
+			}
+			categories := v1.Group("/categories")
+			{
+				categories.GET("/", controllers.GetAllCategories)
+				categories.POST("/", controllers.CreateCategory)
 			}
 		}
 	}
@@ -54,3 +69,13 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 	}*/
 	return router
 }
+
+/*curl -d '{"content":"A sample content"}' -H "Content-Type: application/json" -H "Authorization: Bearer <<JWT>>" -X POST http://localhost:8000/api/entry
+
+curl -d '{"content":"A sample content"}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2ODI1ODk1MjYsImlhdCI6MTY4MjU4NzUyNiwiaWQiOjV9.Ygkg2HFm9HNuS42raazpTU179omt8OTjQSYv_2KOTkU" -X POST http://localhost:8000/api/entry
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2ODI1ODk1MjYsImlhdCI6MTY4MjU4NzUyNiwiaWQiOjV9.Ygkg2HFm9HNuS42raazpTU179omt8OTjQSYv_2KOTkU" -X POST http://localhost:8000/api/v1/entry
+
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2ODI1ODk1MjYsImlhdCI6MTY4MjU4NzUyNiwiaWQiOjV9.Ygkg2HFm9HNuS42raazpTU179omt8OTjQSYv_2KOTkU" -X GET http://localhost:8000/api/v1/entry
+*/

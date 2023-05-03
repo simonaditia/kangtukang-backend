@@ -32,4 +32,7 @@ func loadDatabase() {
 	DB = models.ConnectDatabase()
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.Entry{})
+	DB.AutoMigrate(&models.Orders{})
+	// DB.AutoMigrate(&models.Category{})
+	// DB.AutoMigrate(&models.TukangCategory{})
 }
