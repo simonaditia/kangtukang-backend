@@ -49,6 +49,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 				orders.GET("/statusOrderTukangMenunggu", controllers.StatusOrderTukangMenunggu)
 				orders.GET("/statusOrderTukangBerlangsung", controllers.StatusOrderTukangBerlangsung)
 				orders.GET("/statusOrderTukangSelesai", controllers.StatusOrderTukangSelesai)
+				orders.PATCH("/ubahWaktu/:id", controllers.UbahWaktu)
 			}
 			categories := v1.Group("/categories")
 			{

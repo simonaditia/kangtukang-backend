@@ -7,6 +7,10 @@ import (
 	"github.com/simonaditia/kangtukang-backend/models"
 )
 
+type UpdateWaktuInput struct {
+	WaktuPerbaikan string `json:"waktu_perbaikan"`
+}
+
 func Order(c *gin.Context) {
 	var user models.User
 	var order models.Orders
@@ -261,5 +265,30 @@ func StatusOrderTukangSelesai(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data":   ordersResponse,
 		"status": "success",
+	})
+}
+
+func UbahWaktu(c *gin.Context) {
+	var order models.Orders
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&order).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Record not found!",
+		})
+		return
+	}
+
+	// Validate input
+	var input UpdateWaktuInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	models.DB.Model(&order).Updates(input)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   order,
 	})
 }
