@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -268,7 +269,7 @@ func Login(context *gin.Context) {
 
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"error1": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
@@ -276,7 +277,7 @@ func Login(context *gin.Context) {
 	user, err := models.FindUserByEmail(input.Email)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"error2": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
@@ -284,7 +285,7 @@ func Login(context *gin.Context) {
 	err = user.ValidatePassword(input.Password)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"error3": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
@@ -292,12 +293,14 @@ func Login(context *gin.Context) {
 	jwt, err := helper.GenerateJWT(user)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"error4": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
+	fmt.Println(jwt)
 
 	context.JSON(http.StatusOK, gin.H{
+		"user":    user,
 		"message": "Logged in successfully",
 		"status":  http.StatusOK, //200
 		"jwt":     jwt,
