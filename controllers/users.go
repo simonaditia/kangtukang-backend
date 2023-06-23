@@ -218,10 +218,12 @@ func RegisterCustomer(context *gin.Context) {
 	}
 
 	user := models.User{
-		Nama:     input.Nama,
-		Email:    input.Email,
-		Password: input.Password,
-		Role:     "customer",
+		Nama:      input.Nama,
+		Email:     input.Email,
+		Password:  input.Password,
+		Role:      "customer",
+		Latitude:  input.Latitude,
+		Longitude: input.Longitude,
 	}
 
 	savedUser, err := user.Save()
@@ -246,10 +248,12 @@ func RegisterTukang(context *gin.Context) {
 	}
 
 	user := models.User{
-		Nama:     input.Nama,
-		Email:    input.Email,
-		Password: input.Password,
-		Role:     "tukang",
+		Nama:      input.Nama,
+		Email:     input.Email,
+		Password:  input.Password,
+		Role:      "tukang",
+		Latitude:  input.Latitude,
+		Longitude: input.Longitude,
 	}
 
 	savedUser, err := user.Save()

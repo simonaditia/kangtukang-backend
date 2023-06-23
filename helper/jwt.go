@@ -18,15 +18,17 @@ var privateKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
 func GenerateJWT(user models.User) (string, error) {
 	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":       user.ID,
-		"nama":     user.Nama,
-		"email":    user.Email,
-		"alamat":   user.Alamat,
-		"role":     user.Role,
-		"kategori": user.Kategori,
-		"biaya":    user.Biaya,
-		"iat":      time.Now().Unix(),
-		"eat":      time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(),
+		"id":        user.ID,
+		"nama":      user.Nama,
+		"email":     user.Email,
+		"alamat":    user.Alamat,
+		"role":      user.Role,
+		"kategori":  user.Kategori,
+		"biaya":     user.Biaya,
+		"latitude":  user.Latitude,
+		"longitude": user.Longitude,
+		"iat":       time.Now().Unix(),
+		"eat":       time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(),
 	})
 	return token.SignedString(privateKey)
 }

@@ -11,15 +11,17 @@ import (
 type User struct {
 	gorm.Model
 	// ID         uint   `json:"id" gorm:"primaryKey"`
-	Nama     string `json:"nama"`
-	NoTelp   string `json:"no_telp"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Alamat   string `json:"alamat" gorm:"type:text"`
-	Role     string `json:"role"`
-	Entries  []Entry
-	Kategori string `json:"kategori"`
-	Biaya    string `json:"biaya"`
+	Nama      string `json:"nama"`
+	NoTelp    string `json:"no_telp"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Alamat    string `json:"alamat" gorm:"type:text"`
+	Role      string `json:"role"`
+	Entries   []Entry
+	Kategori  string  `json:"kategori"`
+	Biaya     string  `json:"biaya"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
 	// Categories   []Category `json:"categories" gorm:"many2many:tukang_categories"`
 	// CategoriesID []int      `json:"categories_id" form:"categories_id" gorm:"-"`
 	// Kategori []string `json:"kategori" gorm:"type:json"`
