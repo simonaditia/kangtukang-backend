@@ -3,7 +3,6 @@ package models
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -124,7 +123,7 @@ func FindTukangWithAStarGmaps(start, end *maps.LatLng) (float64, error) {
 	}
 
 	// Menampilkan hasil
-	fmt.Println("Rute Terdekat ada", len(routes), "rute:")
+	/*fmt.Println("Rute Terdekat ada", len(routes), "rute:")
 	for i, route := range routes {
 		fmt.Println("Rute", i+1, ":")
 		fmt.Println("- Jarak:", route.Legs[0].Distance.HumanReadable)
@@ -137,22 +136,23 @@ func FindTukangWithAStarGmaps(start, end *maps.LatLng) (float64, error) {
 
 	fmt.Println()
 	fmt.Println("Rute paling terdekat adalah rute", shortestRoute.Summary, "dengan jarak", shortestRoute.Legs[0].Distance.HumanReadable)
+	*/
 
 	distance := shortestRoute.Legs[0].Distance.HumanReadable
 
-	return convertDistanceToInteger(distance), err
+	return convertDistanceToFloat64(distance), err
 }
 
-func convertDistanceToInteger(distance string) float64 {
+func convertDistanceToFloat64(distance string) float64 {
 	// Menghapus karakter non-digit dari string jarak
 	distance = strings.ReplaceAll(distance, " km", "")
 	distance = strings.ReplaceAll(distance, ",", "")
 
 	// Mengonversi string menjadi int
-	distanceInt, err := strconv.ParseFloat(distance, 64)
+	distanceFloat64, err := strconv.ParseFloat(distance, 64)
 	if err != nil {
 		return 0
 	}
 
-	return distanceInt
+	return distanceFloat64
 }
