@@ -62,6 +62,20 @@ func CurrentUser(context *gin.Context) (models.User, error) {
 	return user, nil
 }
 
+func ParseLatitudeLongitudeFromToken(context *gin.Context) (float64, float64, error) {
+	// err := ValidateJWT(context)
+	// if err != nil {
+	// 	return models.User{}, err
+	// }
+	token, _ := getToken(context)
+	claims, _ := token.Claims.(jwt.MapClaims)
+	// userId := uint(claims["id"].(float64))
+	latitude := claims["latitude"].(float64)
+	longitude := claims["longitude"].(float64)
+
+	return latitude, longitude, nil
+}
+
 func getToken(context *gin.Context) (*jwt.Token, error) {
 	tokenString := getTokenFromRequest(context)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

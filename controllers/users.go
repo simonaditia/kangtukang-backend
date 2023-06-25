@@ -3,10 +3,12 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/simonaditia/kangtukang-backend/helper"
 	"github.com/simonaditia/kangtukang-backend/models"
+	"googlemaps.github.io/maps"
 )
 
 type CreateUserInput struct {
@@ -130,6 +132,16 @@ func FindTukang(c *gin.Context) {
 	const ROLE = "tukang"
 	// fmt.Println(nama, kategori)
 
+	// 1. Parse Token JWT dan Ambil Nilai Latitude dan Longitude
+	latitude, longitude, err := helper.ParseLatitudeLongitudeFromToken(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to parse latitude and longitude from token",
+		})
+		return
+	}
+	fmt.Println(latitude, longitude)
+
 	if nama == "" {
 		err := models.DB.Table("users").Find(&users).Error
 		if err != nil {
@@ -138,20 +150,29 @@ func FindTukang(c *gin.Context) {
 			})
 		}
 	}
-	// {
-	// 	"data": [
-	// 		{
-	// 			"Nama": 12,
-	// 			"Alamat": "Jalan Mangga",
-	// 			"Kategori": [
-	// 				"Renovasi", "Cat", "Plafon"
-	// 			]
-	// 		}
-	// 	]
-	// }
 
-	err := models.DB.Table("users").
+	err = models.DB.Table("users").
 		Where("nama LIKE ? AND kategori LIKE ? AND role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE).Find(&users).Error
+
+	var tukangs []models.User
+	// var distance float64
+	for _, user := range users {
+		// fmt.Println("Tampil user", user)
+		start := &maps.LatLng{Lat: latitude, Lng: longitude}
+		end := &maps.LatLng{Lat: user.Latitude, Lng: user.Longitude}
+
+		result, err := models.FindTukangWithAStarGmaps(start, end)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(result)
+		user.Distance = result
+		tukangs = append(tukangs, user)
+	}
+
+	sort.Slice(tukangs, func(i, j int) bool {
+		return tukangs[i].Distance < tukangs[j].Distance
+	})
 
 	/*err := models.DB.Preload("").Find(&users).Error
 	result := make([]gin.H, len(users))*/
@@ -186,7 +207,8 @@ func FindTukang(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"data":   users,
+		"data":   tukangs,
+		// "data":   users,
 	})
 }
 

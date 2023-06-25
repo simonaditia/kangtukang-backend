@@ -22,6 +22,7 @@ type User struct {
 	Biaya     string  `json:"biaya"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
+	Distance  float64 `json:"distance"`
 	// Categories   []Category `json:"categories" gorm:"many2many:tukang_categories"`
 	// CategoriesID []int      `json:"categories_id" form:"categories_id" gorm:"-"`
 	// Kategori []string `json:"kategori" gorm:"type:json"`
