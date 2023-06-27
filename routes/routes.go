@@ -20,6 +20,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 		publicRoutes.POST("/login", controllers.Login)
 	}
 
+	router.GET("/api/v1/checkIsAvailableEmail", controllers.CheckIsAvailableEmail)
 	protectedRoutes := router.Group("/api")
 	{
 		protectedRoutes.Use(middleware.JWTAuthMiddleware())
@@ -34,6 +35,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 			{
 				users.GET("/", controllers.FindUsers)
 				users.GET("/:id", controllers.FindUser)
+				users.GET("/findEmail", controllers.FindUserByEmail)
+				users.GET("/checkIsAvailableEmail", controllers.CheckIsAvailableEmail)
 				users.GET("/findTukang", controllers.FindTukang)
 				users.GET("/findTukang/:id", controllers.DetailTukang)
 				// users.POST("/", controllers.CreateUser)

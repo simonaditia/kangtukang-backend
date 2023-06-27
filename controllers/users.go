@@ -62,6 +62,85 @@ func FindUser(c *gin.Context) {
 	})
 }
 
+func FindUserByEmail(c *gin.Context) {
+	var users []models.User
+	var email string = c.Query("email")
+
+	if email == "" {
+		err := models.DB.Table("users").Find(&users).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+		}
+	}
+
+	err := models.DB.Table("users").
+		Where("email LIKE ?", "%"+email+"%").Find(&users).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   users,
+	})
+}
+
+func CheckIsAvailableEmail(c *gin.Context) {
+	var users []models.User
+	var email string = c.Query("email")
+
+	if email == "" {
+		err := models.DB.Table("users").Find(&users).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	} else {
+		// Lakukan validasi jika email sudah ada dalam basis data
+		// Misalnya, menggunakan ORM seperti Gorm atau query langsung ke basis data
+
+		// Contoh validasi dengan menggunakan Gorm
+		var count int64
+		err := models.DB.Table("users").Where("email = ?", email).Count(&count).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		if count > 0 {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":     "Email already exists",
+				"available": false,
+			})
+			return
+		}
+
+		err = models.DB.Table("users").
+			Where("email LIKE ?", "%"+email+"%").Find(&users).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":    "success",
+		"data":      users,
+		"available": true,
+	})
+}
+
 /*func FindTukang(c *gin.Context) {
 	var user models.User
 	var nama string = c.Query("nama")
@@ -276,6 +355,7 @@ func RegisterTukang(context *gin.Context) {
 		Role:      "tukang",
 		Latitude:  input.Latitude,
 		Longitude: input.Longitude,
+		Kategori:  "Renovasi",
 	}
 
 	savedUser, err := user.Save()
