@@ -318,6 +318,11 @@ func RegisterCustomer(context *gin.Context) {
 		return
 	}
 
+	address, err := helper.TranslateToAddress(input.Latitude, input.Longitude)
+	if err != nil {
+		panic(err)
+	}
+
 	user := models.User{
 		Nama:      input.Nama,
 		Email:     input.Email,
@@ -325,6 +330,7 @@ func RegisterCustomer(context *gin.Context) {
 		Role:      "customer",
 		Latitude:  input.Latitude,
 		Longitude: input.Longitude,
+		Alamat:    address,
 	}
 
 	savedUser, err := user.Save()
@@ -348,6 +354,11 @@ func RegisterTukang(context *gin.Context) {
 		return
 	}
 
+	address, err := helper.TranslateToAddress(input.Latitude, input.Longitude)
+	if err != nil {
+		panic(err)
+	}
+
 	user := models.User{
 		Nama:      input.Nama,
 		Email:     input.Email,
@@ -356,6 +367,7 @@ func RegisterTukang(context *gin.Context) {
 		Latitude:  input.Latitude,
 		Longitude: input.Longitude,
 		Kategori:  "Renovasi",
+		Alamat:    address,
 	}
 
 	savedUser, err := user.Save()

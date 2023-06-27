@@ -6,6 +6,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -16,8 +17,9 @@ import (
 // GG dah bisa, tapi ini gk menerapkan algortima astar sendiri
 // tetapi pakai library google maps yang menentukan jarak tercepat/terpendek
 func FindTukangWithAStarGmaps(start, end *maps.LatLng) (float64, error) {
+	var gmapsApiKey = os.Getenv("GOOGLE_MAPS_API_KEY")
 	// Inisialisasi klien Google Maps
-	c, err := maps.NewClient(maps.WithAPIKey("AIzaSyDI-XccW0sqI-nyBZz97iRprnSu01oLMXA"))
+	c, err := maps.NewClient(maps.WithAPIKey(gmapsApiKey))
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
