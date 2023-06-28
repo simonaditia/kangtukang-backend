@@ -21,12 +21,14 @@ type CreateUserInput struct {
 }
 
 type UpdateUserInput struct {
-	Nama     string `json:"nama"`
-	NoTelp   string `json:"no_telp"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Alamat   string `json:"alamat"`
-	Kategori string `json:"kategori"`
+	Nama      string  `json:"nama"`
+	NoTelp    string  `json:"no_telp"`
+	Email     string  `json:"email"`
+	Password  string  `json:"password"`
+	Alamat    string  `json:"alamat"`
+	Kategori  string  `json:"kategori"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
 	// CategoriesID []int  `json:"categories_id"`
 	// CategoriesID []int `json:"categories_id" form:"categories_id" gorm:"-"`
 	// IDKategoriTukang int32  `json:"id_kategori_tukang"`
@@ -52,6 +54,20 @@ func FindUser(c *gin.Context) {
 	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
+		})
+		return
+	}
+
+	address, err := helper.TranslateToAddress(user.Latitude, user.Longitude)
+	if err != nil {
+		panic(err)
+	}
+
+	user.Alamat = address
+
+	if err := models.DB.Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to save changes!",
 		})
 		return
 	}
