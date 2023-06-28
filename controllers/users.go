@@ -58,19 +58,19 @@ func FindUser(c *gin.Context) {
 		return
 	}
 
-	address, err := helper.TranslateToAddress(user.Latitude, user.Longitude)
-	if err != nil {
-		panic(err)
-	}
+	// address, err := helper.TranslateToAddress(user.Latitude, user.Longitude)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	user.Alamat = address
+	// user.Alamat = address
 
-	if err := models.DB.Save(&user).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to save changes!",
-		})
-		return
-	}
+	// if err := models.DB.Save(&user).Error; err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{
+	// 		"error": "Failed to save changes!",
+	// 	})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
