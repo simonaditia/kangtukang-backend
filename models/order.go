@@ -14,6 +14,7 @@ type Orders struct {
 	Alamat          string `json:"alamat"`
 	CustomerName    string `json:"nama_customer"`
 	TukangName      string `json:"nama_tukang"`
+	KategoriTukang  string `json:"kategori_tukang"`
 }
 
 // type StatusOrderCustomer struct {
@@ -34,4 +35,5 @@ type OrderResponse struct {
 	Alamat          string `json:"alamat"`
 	TukangName      string `json:"nama_tukang"`
 	CustomerName    string `json:"nama_customer"`
+	KategoriTukang  string `json:"kategori_tukang"`
 }
