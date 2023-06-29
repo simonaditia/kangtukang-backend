@@ -33,7 +33,7 @@ func Order(c *gin.Context) {
 		return
 	}
 
-	pesanan := models.Orders{IDCustomer: id_customer, IDTukang: c.Param("id"), DetailPerbaikan: order.DetailPerbaikan, JadwalPerbaikanAwal: order.JadwalPerbaikanAwal, JadwalPerbaikanAkhir: order.JadwalPerbaikanAkhir, Status: order.Status, Alamat: order.Alamat, LatitudeCustomer: order.LatitudeCustomer, LongitudeCustomer: order.LongitudeCustomer, CustomerName: order.CustomerName, TukangName: order.TukangName, KategoriTukang: order.KategoriTukang}
+	pesanan := models.Orders{IDCustomer: id_customer, IDTukang: c.Param("id"), DetailPerbaikan: order.DetailPerbaikan, JadwalPerbaikanAwal: order.JadwalPerbaikanAwal, JadwalPerbaikanAkhir: order.JadwalPerbaikanAkhir, Status: order.Status, Alamat: order.Alamat, LatitudeCustomer: order.LatitudeCustomer, LongitudeCustomer: order.LongitudeCustomer, CustomerName: order.CustomerName, TukangName: order.TukangName, KategoriTukang: order.KategoriTukang, TotalBiaya: order.TotalBiaya}
 	models.DB.Create(&pesanan)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -192,6 +192,7 @@ func StatusOrderCustomerMenunggu(c *gin.Context) {
 			KategoriTukang:       order.KategoriTukang,
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -231,6 +232,7 @@ func StatusOrderCustomerBerlangsung(c *gin.Context) {
 			KategoriTukang:       order.KategoriTukang,
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -272,6 +274,7 @@ func StatusOrderCustomerSelesai(c *gin.Context) {
 			KategoriTukang:       order.KategoriTukang,
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -311,6 +314,7 @@ func StatusOrderTukangMenunggu(c *gin.Context) {
 			KategoriTukang:       order.KategoriTukang,
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
 		}
 		orderResponse.CustomerName = order.CustomerName
 
@@ -361,6 +365,7 @@ func StatusOrderTukangBerlangsung(c *gin.Context) {
 			KategoriTukang:       order.KategoriTukang,
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -402,6 +407,7 @@ func StatusOrderTukangSelesai(c *gin.Context) {
 			KategoriTukang:       order.KategoriTukang,
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
