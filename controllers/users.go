@@ -27,6 +27,7 @@ type UpdateUserInput struct {
 	Password  string  `json:"password"`
 	Alamat    string  `json:"alamat"`
 	Kategori  string  `json:"kategori"`
+	Biaya     float64 `json:"biaya"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 	// CategoriesID []int  `json:"categories_id"`

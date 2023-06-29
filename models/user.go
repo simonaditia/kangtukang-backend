@@ -19,7 +19,7 @@ type User struct {
 	Role      string `json:"role"`
 	Entries   []Entry
 	Kategori  string  `json:"kategori"`
-	Biaya     string  `json:"biaya"`
+	Biaya     float64 `json:"biaya"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 	Distance  float64 `json:"distance"`

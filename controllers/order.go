@@ -32,7 +32,7 @@ func Order(c *gin.Context) {
 		return
 	}
 
-	pesanan := models.Orders{IDCustomer: id_customer, IDTukang: c.Param("id"), DetailPerbaikan: order.DetailPerbaikan, WaktuPerbaikan: order.WaktuPerbaikan, Status: order.Status, Alamat: order.Alamat}
+	pesanan := models.Orders{IDCustomer: id_customer, IDTukang: c.Param("id"), DetailPerbaikan: order.DetailPerbaikan, WaktuPerbaikan: order.WaktuPerbaikan, Status: order.Status, Alamat: order.Alamat, LatitudeCustomer: order.LatitudeCustomer, LongitudeCustomer: order.LongitudeCustomer, CustomerName: order.CustomerName, TukangName: order.TukangName, KategoriTukang: order.KategoriTukang}
 	models.DB.Create(&pesanan)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -118,16 +118,18 @@ func StatusOrderCustomerMenunggu(c *gin.Context) {
 
 	for _, order := range orders {
 		orderResponse := models.OrderResponse{
-			ID:              order.ID,
-			CustomerID:      order.IDCustomer,
-			TukangID:        order.IDTukang,
-			Status:          order.Status,
-			DetailPerbaikan: order.DetailPerbaikan,
-			WaktuPerbaikan:  order.WaktuPerbaikan,
-			Alamat:          order.Alamat,
-			CustomerName:    order.CustomerName,
-			TukangName:      order.TukangName,
-			KategoriTukang:  order.KategoriTukang,
+			ID:                order.ID,
+			CustomerID:        order.IDCustomer,
+			TukangID:          order.IDTukang,
+			Status:            order.Status,
+			DetailPerbaikan:   order.DetailPerbaikan,
+			WaktuPerbaikan:    order.WaktuPerbaikan,
+			Alamat:            order.Alamat,
+			CustomerName:      order.CustomerName,
+			TukangName:        order.TukangName,
+			KategoriTukang:    order.KategoriTukang,
+			LatitudeCustomer:  order.LatitudeCustomer,
+			LongitudeCustomer: order.LongitudeCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -154,16 +156,18 @@ func StatusOrderCustomerBerlangsung(c *gin.Context) {
 
 	for _, order := range orders {
 		orderResponse := models.OrderResponse{
-			ID:              order.ID,
-			CustomerID:      order.IDCustomer,
-			TukangID:        order.IDTukang,
-			Status:          order.Status,
-			DetailPerbaikan: order.DetailPerbaikan,
-			WaktuPerbaikan:  order.WaktuPerbaikan,
-			Alamat:          order.Alamat,
-			CustomerName:    order.CustomerName,
-			TukangName:      order.TukangName,
-			KategoriTukang:  order.KategoriTukang,
+			ID:                order.ID,
+			CustomerID:        order.IDCustomer,
+			TukangID:          order.IDTukang,
+			Status:            order.Status,
+			DetailPerbaikan:   order.DetailPerbaikan,
+			WaktuPerbaikan:    order.WaktuPerbaikan,
+			Alamat:            order.Alamat,
+			CustomerName:      order.CustomerName,
+			TukangName:        order.TukangName,
+			KategoriTukang:    order.KategoriTukang,
+			LatitudeCustomer:  order.LatitudeCustomer,
+			LongitudeCustomer: order.LongitudeCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -192,16 +196,18 @@ func StatusOrderCustomerSelesai(c *gin.Context) {
 
 	for _, order := range orders {
 		orderResponse := models.OrderResponse{
-			ID:              order.ID,
-			CustomerID:      order.IDCustomer,
-			TukangID:        order.IDTukang,
-			Status:          order.Status,
-			DetailPerbaikan: order.DetailPerbaikan,
-			WaktuPerbaikan:  order.WaktuPerbaikan,
-			Alamat:          order.Alamat,
-			CustomerName:    order.CustomerName,
-			TukangName:      order.TukangName,
-			KategoriTukang:  order.KategoriTukang,
+			ID:                order.ID,
+			CustomerID:        order.IDCustomer,
+			TukangID:          order.IDTukang,
+			Status:            order.Status,
+			DetailPerbaikan:   order.DetailPerbaikan,
+			WaktuPerbaikan:    order.WaktuPerbaikan,
+			Alamat:            order.Alamat,
+			CustomerName:      order.CustomerName,
+			TukangName:        order.TukangName,
+			KategoriTukang:    order.KategoriTukang,
+			LatitudeCustomer:  order.LatitudeCustomer,
+			LongitudeCustomer: order.LongitudeCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -228,16 +234,18 @@ func StatusOrderTukangMenunggu(c *gin.Context) {
 
 	for _, order := range orders {
 		orderResponse := models.OrderResponse{
-			ID:              order.ID,
-			CustomerID:      order.IDCustomer,
-			TukangID:        order.IDTukang,
-			Status:          order.Status,
-			DetailPerbaikan: order.DetailPerbaikan,
-			WaktuPerbaikan:  order.WaktuPerbaikan,
-			Alamat:          order.Alamat,
-			CustomerName:    order.CustomerName,
-			TukangName:      order.TukangName,
-			KategoriTukang:  order.KategoriTukang,
+			ID:                order.ID,
+			CustomerID:        order.IDCustomer,
+			TukangID:          order.IDTukang,
+			Status:            order.Status,
+			DetailPerbaikan:   order.DetailPerbaikan,
+			WaktuPerbaikan:    order.WaktuPerbaikan,
+			Alamat:            order.Alamat,
+			CustomerName:      order.CustomerName,
+			TukangName:        order.TukangName,
+			KategoriTukang:    order.KategoriTukang,
+			LatitudeCustomer:  order.LatitudeCustomer,
+			LongitudeCustomer: order.LongitudeCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 
@@ -275,16 +283,18 @@ func StatusOrderTukangBerlangsung(c *gin.Context) {
 
 	for _, order := range orders {
 		orderResponse := models.OrderResponse{
-			ID:              order.ID,
-			CustomerID:      order.IDCustomer,
-			TukangID:        order.IDTukang,
-			Status:          order.Status,
-			DetailPerbaikan: order.DetailPerbaikan,
-			WaktuPerbaikan:  order.WaktuPerbaikan,
-			Alamat:          order.Alamat,
-			CustomerName:    order.CustomerName,
-			TukangName:      order.TukangName,
-			KategoriTukang:  order.KategoriTukang,
+			ID:                order.ID,
+			CustomerID:        order.IDCustomer,
+			TukangID:          order.IDTukang,
+			Status:            order.Status,
+			DetailPerbaikan:   order.DetailPerbaikan,
+			WaktuPerbaikan:    order.WaktuPerbaikan,
+			Alamat:            order.Alamat,
+			CustomerName:      order.CustomerName,
+			TukangName:        order.TukangName,
+			KategoriTukang:    order.KategoriTukang,
+			LatitudeCustomer:  order.LatitudeCustomer,
+			LongitudeCustomer: order.LongitudeCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -313,16 +323,18 @@ func StatusOrderTukangSelesai(c *gin.Context) {
 
 	for _, order := range orders {
 		orderResponse := models.OrderResponse{
-			ID:              order.ID,
-			CustomerID:      order.IDCustomer,
-			TukangID:        order.IDTukang,
-			Status:          order.Status,
-			DetailPerbaikan: order.DetailPerbaikan,
-			WaktuPerbaikan:  order.WaktuPerbaikan,
-			Alamat:          order.Alamat,
-			CustomerName:    order.CustomerName,
-			TukangName:      order.TukangName,
-			KategoriTukang:  order.KategoriTukang,
+			ID:                order.ID,
+			CustomerID:        order.IDCustomer,
+			TukangID:          order.IDTukang,
+			Status:            order.Status,
+			DetailPerbaikan:   order.DetailPerbaikan,
+			WaktuPerbaikan:    order.WaktuPerbaikan,
+			Alamat:            order.Alamat,
+			CustomerName:      order.CustomerName,
+			TukangName:        order.TukangName,
+			KategoriTukang:    order.KategoriTukang,
+			LatitudeCustomer:  order.LatitudeCustomer,
+			LongitudeCustomer: order.LongitudeCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
