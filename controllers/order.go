@@ -41,7 +41,37 @@ func Order(c *gin.Context) {
 	})
 }
 
-func AccOrderByTukang(c *gin.Context) {
+func CancelOrderByCustomer(c *gin.Context) {
+	id_order := c.Param("id")
+	// Check if the order exists
+	var order models.Orders
+	result := models.DB.First(&order, id_order)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		return
+	}
+
+	// Update the order status
+	result = models.DB.Model(&order).Update("status", "Dibatalkan")
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+		return
+	}
+
+	// Save the changes to the database
+	result = models.DB.Save(&order)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save order changes"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":    order,
+		"message": "Order status updated successfully",
+	})
+}
+
+func AcceptOrderByTukang(c *gin.Context) {
 	id_order := c.Param("id")
 	// Check if the order exists
 	var order models.Orders
