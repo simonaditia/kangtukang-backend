@@ -248,7 +248,7 @@ func FindTukang(c *gin.Context) {
 	const ROLE = "tukang"
 	// fmt.Println(nama, kategori)
 
-	// 1. Parse Token JWT dan Ambil Nilai Latitude dan Longitude
+	// 1. Parse Token JWT dan Ambil Nilai Latitude dan Longitude User Customer
 	latitude, longitude, err := helper.ParseLatitudeLongitudeFromToken(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -267,8 +267,17 @@ func FindTukang(c *gin.Context) {
 		}
 	}
 
+	// err = models.DB.Table("users").
+	// 	Where("nama LIKE ? AND kategori LIKE ? AND role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE).Find(&users).Error
+
 	err = models.DB.Table("users").
-		Where("nama LIKE ? AND kategori LIKE ? AND role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE).Find(&users).Error
+		Select("DISTINCT users.*").
+		Joins("JOIN user_categories ON user_categories.user_id = users.id").
+		Joins("JOIN categories ON categories.id = user_categories.category_id").
+		Where("users.nama LIKE ? AND categories.name LIKE ? AND users.role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE).
+		Preload("Categories").
+		Find(&users).
+		Error
 
 	var tukangs []models.User
 	// var distance float64
