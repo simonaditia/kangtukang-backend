@@ -52,7 +52,7 @@ func FindUsers(c *gin.Context) {
 // Find a user
 func FindUser(c *gin.Context) {
 	var user models.User
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := models.DB.Preload("Categories").First(&user, c.Param("id")).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -77,6 +77,26 @@ func FindUser(c *gin.Context) {
 		"status": "success",
 		"data":   user,
 	})
+}
+
+func AddUserCategory(c *gin.Context) {
+	// db := initDatabase()
+
+	var user models.User
+	if err := models.DB.First(&user, c.Param("id")).Error; err != nil {
+		c.JSON(404, gin.H{"error": "User not found"})
+		return
+	}
+
+	var category models.Category
+	if err := models.DB.First(&category, c.Param("categoryID")).Error; err != nil {
+		c.JSON(404, gin.H{"error": "Category not found"})
+		return
+	}
+
+	models.DB.Model(&user).Association("Categories").Append(&category)
+
+	c.JSON(200, gin.H{"message": "Category added to user"})
 }
 
 func FindUserByEmail(c *gin.Context) {

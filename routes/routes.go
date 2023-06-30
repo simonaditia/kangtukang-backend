@@ -45,6 +45,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 				// users.POST("/", controllers.CreateUser)
 				users.PATCH("/:id", controllers.UpdateUser)
 				users.DELETE("/:id", controllers.DeleteUser)
+				users.POST("/:id/categories/:categoryID", controllers.AddUserCategory)
+				users.PUT("/:id/categories", controllers.UpdateUserCategories)
 			}
 			orders := v1.Group("/orders")
 			{
@@ -63,8 +65,10 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 			}
 			categories := v1.Group("/categories")
 			{
-				categories.GET("/", controllers.GetAllCategories)
-				categories.POST("/", controllers.CreateCategory)
+				categories.GET("/:id", controllers.GetCategory)
+				categories.POST("/:id/users/:userID", controllers.AddCategoryUser)
+				// categories.GET("/", controllers.GetAllCategories)
+				// categories.POST("/", controllers.CreateCategory)
 			}
 		}
 	}
