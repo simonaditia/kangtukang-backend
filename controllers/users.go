@@ -414,6 +414,7 @@ func RegisterTukang(context *gin.Context) {
 		Longitude: input.Longitude,
 		Kategori:  "Renovasi",
 		Alamat:    address,
+		Biaya:     100000,
 	}
 
 	savedUser, err := user.Save()
