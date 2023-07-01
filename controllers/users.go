@@ -412,9 +412,9 @@ func RegisterTukang(context *gin.Context) {
 		Role:      "tukang",
 		Latitude:  input.Latitude,
 		Longitude: input.Longitude,
-		Kategori:  "Renovasi",
-		Alamat:    address,
-		Biaya:     100000,
+		// Kategori:  "Renovasi",
+		Alamat: address,
+		Biaya:  100000,
 	}
 
 	savedUser, err := user.Save()
