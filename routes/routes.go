@@ -16,6 +16,11 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
+
+	router.GET("/hello", func(c *gin.Context) {
+		c.String(200, "halo!")
+	})
+
 	publicRoutes := router.Group("/auth")
 	{
 		publicRoutes.POST("/register-customer", controllers.RegisterCustomer)
