@@ -18,7 +18,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 	})
 
 	router.GET("/hello", func(c *gin.Context) {
-		c.String(200, "halo!")
+		c.String(200, "halo halo")
 	})
 
 	publicRoutes := router.Group("/auth")
