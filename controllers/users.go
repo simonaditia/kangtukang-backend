@@ -30,6 +30,7 @@ type UpdateUserInput struct {
 	Biaya     float64 `json:"biaya"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
+	ImageUrl  string  `json:"image_url"`
 	// CategoriesID []int  `json:"categories_id"`
 	// CategoriesID []int `json:"categories_id" form:"categories_id" gorm:"-"`
 	// IDKategoriTukang int32  `json:"id_kategori_tukang"`

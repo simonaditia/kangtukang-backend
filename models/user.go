@@ -24,6 +24,7 @@ type User struct {
 	Longitude  float64    `json:"longitude"`
 	Distance   float64    `json:"distance"`
 	Categories []Category `gorm:"many2many:user_categories;"`
+	ImageUrl   string     `json:"image_url"`
 	// Categories   []Category `json:"categories" gorm:"many2many:tukang_categories"`
 	// CategoriesID []int      `json:"categories_id" form:"categories_id" gorm:"-"`
 	// Kategori []string `json:"kategori" gorm:"type:json"`
