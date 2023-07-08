@@ -162,6 +162,46 @@ func DoneOrderByTukang(c *gin.Context) {
 	})
 }
 
+func ReadOrderByTukang(c *gin.Context) {
+	var orders []models.Orders
+	var ordersResponse []models.OrderResponse
+	var id_tukang string = c.Query("id_tukang")
+	var STATUS = "Menunggu Konfirmasi"
+
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_tukang = users_2.id").Where("orders.id_tukang = ? AND status = ?", id_tukang, STATUS).Find(&orders).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Record not found!",
+		})
+		return
+	}
+
+	for _, order := range orders {
+		orderResponse := models.OrderResponse{
+			ID:                   order.ID,
+			TukangID:             order.IDTukang,
+			CustomerID:           order.IDCustomer,
+			Status:               order.Status,
+			DetailPerbaikan:      order.DetailPerbaikan,
+			JadwalPerbaikanAwal:  order.JadwalPerbaikanAwal,
+			JadwalPerbaikanAkhir: order.JadwalPerbaikanAkhir,
+			Alamat:               order.Alamat,
+			CustomerName:         order.CustomerName,
+			TukangName:           order.TukangName,
+			KategoriTukang:       order.KategoriTukang,
+			LatitudeCustomer:     order.LatitudeCustomer,
+			LongitudeCustomer:    order.LongitudeCustomer,
+			TotalBiaya:           order.TotalBiaya,
+		}
+		orderResponse.CustomerName = order.CustomerName
+		ordersResponse = append(ordersResponse, orderResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":   ordersResponse,
+		"status": "success",
+	})
+}
+
 func StatusOrderCustomerMenunggu(c *gin.Context) {
 	var orders []models.Orders
 	// var order models.Orders

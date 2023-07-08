@@ -60,6 +60,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 				orders.PUT("/accOrderByTukang/:id", controllers.AcceptOrderByTukang)
 				orders.PUT("/rejectOrderByTukang/:id", controllers.RejectOrderByTukang)
 				orders.PUT("/doneOrderByTukang/:id", controllers.DoneOrderByTukang)
+				orders.GET("/readOrderByTukang", controllers.ReadOrderByTukang)
 				orders.GET("/statusOrderCustomerMenunggu", controllers.StatusOrderCustomerMenunggu)
 				orders.GET("/statusOrderCustomerBerlangsung", controllers.StatusOrderCustomerBerlangsung)
 				orders.GET("/statusOrderCustomerSelesai", controllers.StatusOrderCustomerSelesai)
