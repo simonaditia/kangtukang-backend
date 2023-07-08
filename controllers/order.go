@@ -210,7 +210,7 @@ func StatusOrderCustomerMenunggu(c *gin.Context) {
 	var id_customer string = c.Query("id_customer")
 	var STATUS = "Menunggu Konfirmasi"
 
-	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_customer = ? AND status = ?", id_customer, STATUS).Find(&orders).Error; err != nil {
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang, users.no_telp AS no_telp_tukang, users_2.no_telp AS no_telp_customer").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_customer = ? AND status = ?", id_customer, STATUS).Find(&orders).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -233,6 +233,8 @@ func StatusOrderCustomerMenunggu(c *gin.Context) {
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
 			TotalBiaya:           order.TotalBiaya,
+			NoTelpTukang:         order.NoTelpTukang,
+			NoTelpCustomer:       order.NoTelpCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -250,7 +252,7 @@ func StatusOrderCustomerBerlangsung(c *gin.Context) {
 	var id_customer string = c.Query("id_customer")
 	var STATUS = "Sedang Berlangsung"
 
-	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_customer = ? AND status = ?", id_customer, STATUS).Find(&orders).Error; err != nil {
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang, users.no_telp AS no_telp_tukang, users_2.no_telp AS no_telp_customer").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_customer = ? AND status = ?", id_customer, STATUS).Find(&orders).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -273,6 +275,8 @@ func StatusOrderCustomerBerlangsung(c *gin.Context) {
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
 			TotalBiaya:           order.TotalBiaya,
+			NoTelpTukang:         order.NoTelpTukang,
+			NoTelpCustomer:       order.NoTelpCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -292,7 +296,7 @@ func StatusOrderCustomerSelesai(c *gin.Context) {
 	var STATUS_BATAL = "Dibatalkan"
 	var STATUS_TOLAK = "Ditolak"
 
-	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_customer = ? AND (status = ? OR status = ? OR status = ?)", id_customer, STATUS_SELESAI, STATUS_BATAL, STATUS_TOLAK).Find(&orders).Error; err != nil {
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang, users.no_telp AS no_telp_tukang, users_2.no_telp AS no_telp_customer").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_customer = ? AND (status = ? OR status = ? OR status = ?)", id_customer, STATUS_SELESAI, STATUS_BATAL, STATUS_TOLAK).Find(&orders).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -315,6 +319,8 @@ func StatusOrderCustomerSelesai(c *gin.Context) {
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
 			TotalBiaya:           order.TotalBiaya,
+			NoTelpTukang:         order.NoTelpTukang,
+			NoTelpCustomer:       order.NoTelpCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -332,7 +338,7 @@ func StatusOrderTukangMenunggu(c *gin.Context) {
 	var id_tukang string = c.Query("id_tukang")
 	var STATUS = "Menunggu Konfirmasi"
 
-	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_tukang = ? AND status = ?", id_tukang, STATUS).Find(&orders).Error; err != nil {
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang, users.no_telp AS no_telp_tukang, users_2.no_telp AS no_telp_customer").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_tukang = ? AND status = ?", id_tukang, STATUS).Find(&orders).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -355,6 +361,8 @@ func StatusOrderTukangMenunggu(c *gin.Context) {
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
 			TotalBiaya:           order.TotalBiaya,
+			NoTelpTukang:         order.NoTelpTukang,
+			NoTelpCustomer:       order.NoTelpCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 
@@ -383,7 +391,7 @@ func StatusOrderTukangBerlangsung(c *gin.Context) {
 	var id_tukang string = c.Query("id_tukang")
 	var STATUS = "Sedang Berlangsung"
 
-	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_tukang = ? AND status = ?", id_tukang, STATUS).Find(&orders).Error; err != nil {
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang, users.no_telp AS no_telp_tukang, users_2.no_telp AS no_telp_customer").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_tukang = ? AND status = ?", id_tukang, STATUS).Find(&orders).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -406,6 +414,8 @@ func StatusOrderTukangBerlangsung(c *gin.Context) {
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
 			TotalBiaya:           order.TotalBiaya,
+			NoTelpTukang:         order.NoTelpTukang,
+			NoTelpCustomer:       order.NoTelpCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -425,7 +435,7 @@ func StatusOrderTukangSelesai(c *gin.Context) {
 	var STATUS_BATAL = "Dibatalkan"
 	var STATUS_TOLAK = "Ditolak"
 
-	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_tukang = ? AND (status = ? OR status = ? OR status = ?)", id_tukang, STATUS_SELESAI, STATUS_BATAL, STATUS_TOLAK).Find(&orders).Error; err != nil {
+	if err := models.DB.Table("orders").Select("orders.*, users.nama AS tukang_name, users_2.nama AS customer_name, users.kategori AS kategori_tukang, users.no_telp AS no_telp_tukang, users_2.no_telp AS no_telp_customer").Joins("JOIN users ON orders.id_tukang = users.id").Joins("JOIN users AS users_2 ON orders.id_customer = users_2.id").Where("orders.id_tukang = ? AND (status = ? OR status = ? OR status = ?)", id_tukang, STATUS_SELESAI, STATUS_BATAL, STATUS_TOLAK).Find(&orders).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Record not found!",
 		})
@@ -448,6 +458,8 @@ func StatusOrderTukangSelesai(c *gin.Context) {
 			LatitudeCustomer:     order.LatitudeCustomer,
 			LongitudeCustomer:    order.LongitudeCustomer,
 			TotalBiaya:           order.TotalBiaya,
+			NoTelpTukang:         order.NoTelpTukang,
+			NoTelpCustomer:       order.NoTelpCustomer,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)

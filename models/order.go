@@ -19,6 +19,8 @@ type Orders struct {
 	LatitudeCustomer     float64 `json:"latitude_customer"`
 	LongitudeCustomer    float64 `json:"longitude_customer"`
 	TotalBiaya           float64 `json:"total_biaya"`
+	NoTelpTukang         string  `json:"no_telp_tukang"`
+	NoTelpCustomer       string  `json:"no_telp_customer"`
 }
 
 // type StatusOrderCustomer struct {
@@ -44,4 +46,6 @@ type OrderResponse struct {
 	LatitudeCustomer     float64 `json:"latitude_customer"`
 	LongitudeCustomer    float64 `json:"longitude_customer"`
 	TotalBiaya           float64 `json:"total_biaya"`
+	NoTelpTukang         string  `json:"no_telp_tukang"`
+	NoTelpCustomer       string  `json:"no_telp_customer"`
 }
