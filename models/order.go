@@ -18,6 +18,8 @@ type Orders struct {
 	KategoriTukang       string  `json:"kategori_tukang"`
 	LatitudeCustomer     float64 `json:"latitude_customer"`
 	LongitudeCustomer    float64 `json:"longitude_customer"`
+	LatitudeTukang       float64 `json:"latitude_tukang"`
+	LongitudeTukang      float64 `json:"longitude_tukang"`
 	TotalBiaya           float64 `json:"total_biaya"`
 	NoTelpTukang         string  `json:"no_telp_tukang"`
 	NoTelpCustomer       string  `json:"no_telp_customer"`
@@ -45,6 +47,8 @@ type OrderResponse struct {
 	KategoriTukang       string  `json:"kategori_tukang"`
 	LatitudeCustomer     float64 `json:"latitude_customer"`
 	LongitudeCustomer    float64 `json:"longitude_customer"`
+	LatitudeTukang       float64 `json:"latitude_tukang"`
+	LongitudeTukang      float64 `json:"longitude_tukang"`
 	TotalBiaya           float64 `json:"total_biaya"`
 	NoTelpTukang         string  `json:"no_telp_tukang"`
 	NoTelpCustomer       string  `json:"no_telp_customer"`
