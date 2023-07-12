@@ -21,6 +21,7 @@ func GenerateJWT(user models.User) (string, error) {
 		"id":        user.ID,
 		"nama":      user.Nama,
 		"email":     user.Email,
+		"no_telp":   user.NoTelp,
 		"alamat":    user.Alamat,
 		"role":      user.Role,
 		"kategori":  user.Kategori,

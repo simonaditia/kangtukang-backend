@@ -63,6 +63,26 @@ func FindUserByEmail(email string) (User, error) {
 	return user, nil
 }
 
+func FindUserByEmailandNoTelp(email, no_telp string) (User, error) {
+	var user User
+	query := DB
+
+	if email != "" {
+		query = query.Where("email = ?", email)
+	}
+
+	if no_telp != "" {
+		query = query.Or("no_telp = ?", no_telp)
+	}
+
+	err := query.First(&user).Error
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
+}
+
 func FindUserById(id uint) (User, error) {
 	var user User
 	err := DB.Preload("Entries").Where("ID=?", id).Find(&user).Error

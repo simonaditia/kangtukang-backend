@@ -179,6 +179,53 @@ func CheckIsAvailableEmail(c *gin.Context) {
 	})
 }
 
+func CheckIsAvailableNoTelp(c *gin.Context) {
+	var users []models.User
+	var no_telp string = c.Query("no_telp")
+
+	if no_telp == "" {
+		err := models.DB.Table("users").Find(&users).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	} else {
+		var count int64
+		err := models.DB.Table("users").Where("no_telp = ?", no_telp).Count(&count).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		if count > 0 {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":     "No Telepon already exists",
+				"available": false,
+			})
+			return
+		}
+
+		err = models.DB.Table("users").
+			Where("no_telp LIKE ?", "%"+no_telp+"%").Find(&users).Error
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":    "success",
+		"data":      users,
+		"available": true,
+	})
+}
+
 /*func FindTukang(c *gin.Context) {
 	var user models.User
 	var nama string = c.Query("nama")
@@ -430,6 +477,82 @@ func RegisterTukang(context *gin.Context) {
 	})
 }
 
+func RegisterCustomerV2(context *gin.Context) {
+	var input models.AuthenticationInputRegister
+	if err := context.ShouldBindJSON(&input); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	address, err := helper.TranslateToAddress(input.Latitude, input.Longitude)
+	if err != nil {
+		panic(err)
+	}
+
+	user := models.User{
+		Nama:      input.Nama,
+		Email:     input.Email,
+		NoTelp:    input.NoTelp,
+		Password:  input.Password,
+		Role:      "customer",
+		Latitude:  input.Latitude,
+		Longitude: input.Longitude,
+		Alamat:    address,
+	}
+
+	savedUser, err := user.Save()
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	context.JSON(http.StatusCreated, gin.H{
+		"user": savedUser,
+	})
+}
+
+func RegisterTukangV2(context *gin.Context) {
+	var input models.AuthenticationInputRegister
+	if err := context.ShouldBindJSON(&input); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	address, err := helper.TranslateToAddress(input.Latitude, input.Longitude)
+	if err != nil {
+		panic(err)
+	}
+
+	user := models.User{
+		Nama:      input.Nama,
+		Email:     input.Email,
+		NoTelp:    input.NoTelp,
+		Password:  input.Password,
+		Role:      "tukang",
+		Latitude:  input.Latitude,
+		Longitude: input.Longitude,
+		// Kategori:  "Renovasi",
+		Alamat: address,
+		Biaya:  100000,
+	}
+
+	savedUser, err := user.Save()
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	context.JSON(http.StatusCreated, gin.H{
+		"user": savedUser,
+	})
+}
+
 func Login(context *gin.Context) {
 	var input models.AuthenticationInput
 
@@ -444,6 +567,74 @@ func Login(context *gin.Context) {
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
+		})
+		return
+	}
+
+	err = user.ValidatePassword(input.Password)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	jwt, err := helper.GenerateJWT(user)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	fmt.Println(jwt)
+
+	context.JSON(http.StatusOK, gin.H{
+		"user":    user,
+		"message": "Logged in successfully",
+		"status":  http.StatusOK, //200
+		"jwt":     jwt,
+	})
+}
+
+func LoginV2(context *gin.Context) {
+	var input models.AuthenticationInput
+	var user models.User
+	var err error
+
+	if err := context.ShouldBindJSON(&input); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// user, err := models.FindUserByEmailandNoTelp(input.Email, input.NoTelp)
+	// if err != nil {
+	// 	context.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": err.Error(),
+	// 	})
+	// 	return
+	// }
+
+	// Periksa apakah email ada dalam input JSON
+	if input.Email != "" {
+		user, err = models.FindUserByEmailandNoTelp(input.Email, "")
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+		}
+	} else if input.NoTelp != "" {
+		user, err = models.FindUserByEmailandNoTelp("", input.NoTelp)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+		}
+	} else {
+		// Jika tidak ada email atau nomor telepon, kembalikan error
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Email or NoTelp is required",
 		})
 		return
 	}
