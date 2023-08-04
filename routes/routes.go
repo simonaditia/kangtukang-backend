@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/simonaditia/kangtukang-backend/controllers"
 	"github.com/simonaditia/kangtukang-backend/middleware"
@@ -9,6 +10,7 @@ import (
 
 func SetupRoutes(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
+
 	router.Use(func(c *gin.Context) {
 		c.Set("db", db)
 	})
@@ -20,6 +22,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 	router.GET("/hello", func(c *gin.Context) {
 		c.String(200, "halo halo")
 	})
+
+	router.Use(cors.Default())
 
 	publicRoutes := router.Group("/auth")
 	{
@@ -34,6 +38,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 
 	router.GET("/api/v1/checkIsAvailableEmail", controllers.CheckIsAvailableEmail)
 	router.GET("/api/v1/checkIsAvailableNoTelp", controllers.CheckIsAvailableNoTelp)
+	router.GET("/website/api/v1/users/allCustomer", controllers.FindAllCustomer)
+	router.GET("/website/api/v1/users/allTukang", controllers.FindAllTukang)
 	protectedRoutes := router.Group("/api")
 	{
 		protectedRoutes.Use(middleware.JWTAuthMiddleware())
@@ -48,6 +54,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 			{
 				users.GET("/", controllers.FindUsers)
 				users.GET("/:id", controllers.FindUser)
+				users.GET("/allCustomer", controllers.FindAllCustomer)
+				users.GET("/allTukang", controllers.FindAllTukang)
 				users.GET("/findEmail", controllers.FindUserByEmail)
 				users.GET("/checkIsAvailableEmail", controllers.CheckIsAvailableEmail)
 				users.GET("/findTukang", controllers.FindTukang)

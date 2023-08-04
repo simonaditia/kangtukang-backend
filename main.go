@@ -16,6 +16,11 @@ func main() {
 	loadDatabase()
 
 	router := routes.SetupRoutes(DB)
+	// config := cors.DefaultConfig()
+	// config.AllowOrigins = []string{"http://localhost:5173"}
+	// config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+	// config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	// router.Use(cors.New(config))
 	// router.Run()
 	router.Run(":8000")
 	fmt.Println("Server running on port 8000")

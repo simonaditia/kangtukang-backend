@@ -23,6 +23,7 @@ type Orders struct {
 	TotalBiaya           float64 `json:"total_biaya"`
 	NoTelpTukang         string  `json:"no_telp_tukang"`
 	NoTelpCustomer       string  `json:"no_telp_customer"`
+	AlasanTolakBatal     string  `json:"alasan_tolak_batal"`
 }
 
 // type StatusOrderCustomer struct {
@@ -52,4 +53,5 @@ type OrderResponse struct {
 	TotalBiaya           float64 `json:"total_biaya"`
 	NoTelpTukang         string  `json:"no_telp_tukang"`
 	NoTelpCustomer       string  `json:"no_telp_customer"`
+	AlasanTolakBatal     string  `json:"alasan_tolak_batal"`
 }

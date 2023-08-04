@@ -80,6 +80,38 @@ func FindUser(c *gin.Context) {
 	})
 }
 
+func FindAllCustomer(c *gin.Context) {
+	var users []models.User
+	if err := models.DB.Preload("Categories").Where("role = ?", "customer").Find(&users).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Records not found!",
+		})
+		return
+	}
+
+	c.Header("Access-Control-Allow-Origin", "http://localhost:5173")
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   users,
+	})
+}
+
+func FindAllTukang(c *gin.Context) {
+	var users []models.User
+	if err := models.DB.Preload("Categories").Where("role = ?", "tukang").Find(&users).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Records not found!",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   users,
+	})
+}
+
 func AddUserCategory(c *gin.Context) {
 	// db := initDatabase()
 
@@ -319,12 +351,12 @@ func FindTukang(c *gin.Context) {
 	// 	Where("nama LIKE ? AND kategori LIKE ? AND role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE).Find(&users).Error
 
 	err = models.DB.Table("users").
-		Select("DISTINCT users.*").
-		Joins("JOIN user_categories ON user_categories.user_id = users.id").
-		Joins("JOIN categories ON categories.id = user_categories.category_id").
-		Where("users.nama LIKE ? AND categories.name LIKE ? AND users.role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE).
-		Preload("Categories").
-		Find(&users).
+		Select("DISTINCT users.*").                                                                                     //hanya kolom-kolom dari tabel "users" yang akan dipilih, dan baris-baris dengan nilai yang sama akan dieliminasi
+		Joins("JOIN user_categories ON user_categories.user_id = users.id").                                            // menggabungkan tabel "users" dengan tabel "user_categories" berdasarkan kondisi user_categories.user_id = users.id. Ini memungkinkan untuk menghubungkan informasi dari kedua tabel.
+		Joins("JOIN categories ON categories.id = user_categories.category_id").                                        // menggabungkan tabel "categories" dengan tabel "user_categories" berdasarkan kondisi categories.id = user_categories.category_id. Dengan ini, Anda dapat menghubungkan informasi dari ketiga tabel.
+		Where("users.nama LIKE ? AND categories.name LIKE ? AND users.role = ?", "%"+nama+"%", "%"+kategori+"%", ROLE). //WHERE yang memberikan beberapa kondisi filter
+		Preload("Categories").                                                                                          // agar bisa melakukan relasi many to many dari tabel users ke tabel categories
+		Find(&users).                                                                                                   // Perintah ini menjalankan query dan mengisi hasilnya ke dalam variabel
 		Error
 
 	var tukangs []models.User
@@ -343,6 +375,7 @@ func FindTukang(c *gin.Context) {
 		tukangs = append(tukangs, user)
 	}
 
+	// Sort by Ascending
 	sort.Slice(tukangs, func(i, j int) bool {
 		return tukangs[i].Distance < tukangs[j].Distance
 	})

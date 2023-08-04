@@ -12,6 +12,11 @@ type UpdateWaktuInput struct {
 	JadwalPerbaikanAkhir string `json:"jadwal_perbaikan_akhir"`
 }
 
+type UpdateOrdersAlasan struct {
+	Status           string `json:"status"`
+	AlasanTolakBatal string `json:"alasan_tolak_batal"`
+}
+
 func Order(c *gin.Context) {
 	var user models.User
 	var order models.Orders
@@ -53,18 +58,28 @@ func CancelOrderByCustomer(c *gin.Context) {
 	}
 
 	// Update the order status
-	result = models.DB.Model(&order).Update("status", "Dibatalkan")
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+	var input UpdateOrdersAlasan
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
+	models.DB.Model(&order).Updates(input)
+
+	// Update the order status
+	// result = models.DB.Model(&order).Update("status", "Dibatalkan")
+	// if result.Error != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+	// 	return
+	// }
 
 	// Save the changes to the database
-	result = models.DB.Save(&order)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save order changes"})
-		return
-	}
+	// result = models.DB.Save(&order)
+	// if result.Error != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save order changes"})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"data":    order,
@@ -113,18 +128,26 @@ func RejectOrderByTukang(c *gin.Context) {
 	}
 
 	// Update the order status
-	result = models.DB.Model(&order).Update("status", "Ditolak")
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+	var input UpdateOrdersAlasan
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
+	models.DB.Model(&order).Updates(input)
+	// result = models.DB.Model(&order).Update("status", "Ditolak")
+	// if result.Error != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+	// 	return
+	// }
 
-	// Save the changes to the database
-	result = models.DB.Save(&order)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save order changes"})
-		return
-	}
+	// // Save the changes to the database
+	// result = models.DB.Save(&order)
+	// if result.Error != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save order changes"})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"data":    order,
@@ -327,6 +350,7 @@ func StatusOrderCustomerSelesai(c *gin.Context) {
 			TotalBiaya:           order.TotalBiaya,
 			NoTelpTukang:         order.NoTelpTukang,
 			NoTelpCustomer:       order.NoTelpCustomer,
+			AlasanTolakBatal:     order.AlasanTolakBatal,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
@@ -466,6 +490,7 @@ func StatusOrderTukangSelesai(c *gin.Context) {
 			TotalBiaya:           order.TotalBiaya,
 			NoTelpTukang:         order.NoTelpTukang,
 			NoTelpCustomer:       order.NoTelpCustomer,
+			AlasanTolakBatal:     order.AlasanTolakBatal,
 		}
 		orderResponse.CustomerName = order.CustomerName
 		ordersResponse = append(ordersResponse, orderResponse)
